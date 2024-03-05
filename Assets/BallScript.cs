@@ -7,9 +7,10 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
     private bool dead = false;
+    private int is_dead = 0;
     public Color RedColor = Color.red;
     public float speed = 2f;
-
+    public AudioSource BackMusic, JumpSound, DeadSound, DeadMusic;
     void Start()
     {
 
@@ -36,6 +37,30 @@ public class BallScript : MonoBehaviour
         }
         
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Map"))
+        {
+            if (JumpSound != null)
+            {
+                if (!dead)
+                {
+                    JumpSound.Play();
+                }
+            }
+        }
+        if (collision.gameObject.CompareTag("Lava"))
+        {
+            if (is_dead == 0)
+            {
+                BackMusic.Stop();
+                DeadSound.Play();
+                DeadMusic.Play();
+                is_dead++;
+            }
+        }
+    }
+        
     private void OnTriggerEnter(Collider other)
     {
         Console.WriteLine("1");
