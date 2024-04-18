@@ -7,7 +7,7 @@ using UnityEngine;
 public class BallScript : MonoBehaviour
 {
     private bool dead = false;
-    private int is_dead = 0;
+    private bool is_dead = false;
     public Color RedColor = Color.red;
     public float speed = 2f;
     public AudioSource BackMusic, JumpSound, DeadSound, DeadMusic;
@@ -24,7 +24,7 @@ public class BallScript : MonoBehaviour
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
-            Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
+            Vector3 movement = new Vector3(-horizontalInput, 0f, -verticalInput);
 
             transform.Translate(movement * speed * Time.deltaTime);
         }
@@ -51,13 +51,18 @@ public class BallScript : MonoBehaviour
         }
         if (collision.gameObject.CompareTag("Lava"))
         {
-            if (is_dead == 0)
+            if (!is_dead)
             {
                 BackMusic.Stop();
                 DeadSound.Play();
                 DeadMusic.Play();
-                is_dead++;
+                is_dead = true;
             }
+        }
+        if (collision.gameObject.CompareTag("Finish"))
+        {
+            BackMusic.Stop();
+            DeadSound.Play();
         }
     }
         
